@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   SearchbarStyled,
@@ -8,47 +8,43 @@ import {
   SearchInput,
 } from './Searchbar.styled';
 
-export class Searchbar extends React.Component {
-  state = {
-    querySearch: '',
+export const Searchbar = ({ onSubmit }) => {
+  const [querySearch, setQuerySearch] = useState('');
+
+  const onInputChange = e => {
+    setQuerySearch(e.target.value.toLowerCase());
   };
 
-  onInputChange = e => {
-    this.setState({ querySearch: e.target.value.toLowerCase() });
-  };
-
-  onInputSubmit = e => {
+  const onInputSubmit = e => {
     e.preventDefault();
 
-    if (this.state.querySearch.trim() === '') {
+    if (querySearch.trim() === '') {
       toast.error('Пустий запит??!?! Серйозно??!');
       return;
     }
 
-    this.props.onSubmit(this.state.querySearch);
+    onSubmit(querySearch);
 
-    this.setState({ querySearch: '' });
+    setQuerySearch('');
   };
 
-  render() {
-    return (
-      <SearchbarStyled>
-        <SearchForm className="form" onSubmit={this.onInputSubmit}>
-          <SearchButton type="submit" className="button">
-            <ButtonLabel className="button-label">Search</ButtonLabel>
-          </SearchButton>
+  return (
+    <SearchbarStyled>
+      <SearchForm className="form" onSubmit={onInputSubmit}>
+        <SearchButton type="submit" className="button">
+          <ButtonLabel className="button-label">Search</ButtonLabel>
+        </SearchButton>
 
-          <SearchInput
-            className="input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.onInputChange}
-            value={this.state.querySearch}
-          />
-        </SearchForm>
-      </SearchbarStyled>
-    );
-  }
-}
+        <SearchInput
+          className="input"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          onChange={onInputChange}
+          value={querySearch}
+        />
+      </SearchForm>
+    </SearchbarStyled>
+  );
+};
