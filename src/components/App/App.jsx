@@ -1,4 +1,4 @@
-import { Component, useEffect, useState } from 'react';
+import { Component } from 'react';
 import { Searchbar } from '../Searchbar/Searchbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
