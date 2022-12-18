@@ -20,7 +20,7 @@ export const App = () => {
   };
 
   const selectImage = imgUrl => {
-    setSelectedImage({ selectedImage: imgUrl });
+    setSelectedImage(imgUrl);
   };
 
   return (
