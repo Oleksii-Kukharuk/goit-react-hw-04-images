@@ -12,14 +12,11 @@ export const ImageGallery = ({ searchQuery, onSelect }) => {
   const [pages, setPages] = useState(0);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(1);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setPage(1);
-    setData([]);
-    setIsLoading(true);
-
     async function fetchData() {
+      setIsLoading(true);
       try {
         const data = await getImeges(searchQuery, page);
         if (data.totalHits === 0) {
@@ -27,7 +24,7 @@ export const ImageGallery = ({ searchQuery, onSelect }) => {
         }
         const totalPages = Math.round(data.total / 12);
         setPages(totalPages);
-        setData([data, ...data.hits]);
+        setData(prevData => [...prevData, ...data.hits]);
       } catch (error) {
         setError('от халепа, додаток впав');
       } finally {
@@ -35,11 +32,19 @@ export const ImageGallery = ({ searchQuery, onSelect }) => {
       }
     }
 
-    fetchData();
+    if (searchQuery) {
+      fetchData();
+      onQueryChange();
+    }
   }, [searchQuery, page]);
 
+  const onQueryChange = query => {
+    setPage(1);
+    setData([]);
+  };
+
   const loadMore = () => {
-    this.setState(page + 1);
+    setPage(page => page + 1);
   };
 
   return (
